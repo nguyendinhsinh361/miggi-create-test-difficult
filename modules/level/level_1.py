@@ -25,7 +25,7 @@ class Level_1_Service:
                     obj = next((item for item in test_follow_level[0]["parts"] if item.get(
                         "kind") == key), None)
                     kind_gen_result = query.get_question_by_ids_kind_and_add_score(
-                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key])
+                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key], obj["sub_count_question"])
                     content_model: ContentModel = {
                         "kind": key,
                         "Questions": kind_gen_result
@@ -36,7 +36,7 @@ class Level_1_Service:
                     obj = next((item for item in test_follow_level[1]["parts"] if item.get(
                         "kind") == key), None)
                     kind_gen_result = query.get_question_by_ids_kind_and_add_score(
-                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key])
+                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key], obj["sub_count_question"])
                     content_model: ContentModel = {
                         "kind": key,
                         "Questions": kind_gen_result
