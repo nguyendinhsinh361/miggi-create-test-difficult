@@ -6,7 +6,7 @@ def main():
     # statistics.run()
 
     # Step 2
-    # calculate_rate.run()
+    calculate_rate.run()
 
     # Step 3
     gen_test.run()

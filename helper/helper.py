@@ -1,5 +1,8 @@
 import random
 import json
+from models.hsk import ContentModel
+from modules.questions import service
+
 
 KIND_FORMAT_PATH = "static/kind_format.json"
 TEST_PATH = "test/test_distribute_kind.json"
@@ -67,3 +70,15 @@ def get_value_by_key(array, key):
         if key in item:
             return item[key]
     return None
+
+
+def gen_question_by_type_and_kind(test_follow_level, type_index, ids_diff, ids_not_diff, key, distribute_questions_diff_key):
+    obj = next((item for item in test_follow_level[type_index]["parts"] if item.get(
+        "kind") == key), None)
+    kind_gen_result = service.get_question_by_ids_kind_and_add_score(
+        ids_diff, ids_not_diff, key, obj["score"], distribute_questions_diff_key, obj["sub_count_question"])
+    content_model: ContentModel = {
+        "kind": key,
+        "Questions": kind_gen_result
+    }
+    test_follow_level[type_index]["content"].append(content_model)

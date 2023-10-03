@@ -1,5 +1,3 @@
-from models.hsk import ContentModel
-from repo import query
 from helper import helper
 import copy
 DATA_TEST = "test/level_1.json"
@@ -22,26 +20,11 @@ class Level_1_Service:
                 test_follow_level[index]["content"] = []
             for key, value in kind_data["questions"].items():
                 if (key.startswith("11")):
-                    obj = next((item for item in test_follow_level[0]["parts"] if item.get(
-                        "kind") == key), None)
-                    kind_gen_result = query.get_question_by_ids_kind_and_add_score(
-                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key], obj["sub_count_question"])
-                    content_model: ContentModel = {
-                        "kind": key,
-                        "Questions": kind_gen_result
-                    }
-                    test_follow_level[0]["content"].append(content_model)
-
+                    helper.gen_question_by_type_and_kind(
+                        test_follow_level, 0, kind_data["ids_diff"], kind_data["ids_not_diff"], key, distribute_questions_diff[key])
                 elif (key.startswith("12")):
-                    obj = next((item for item in test_follow_level[1]["parts"] if item.get(
-                        "kind") == key), None)
-                    kind_gen_result = query.get_question_by_ids_kind_and_add_score(
-                        kind_data["ids_diff"], kind_data["ids_not_diff"], key, obj["score"], distribute_questions_diff[key], obj["sub_count_question"])
-                    content_model: ContentModel = {
-                        "kind": key,
-                        "Questions": kind_gen_result
-                    }
-                    test_follow_level[1]["content"].append(content_model)
+                    helper.gen_question_by_type_and_kind(
+                        test_follow_level, 1, kind_data["ids_diff"], kind_data["ids_not_diff"], key, distribute_questions_diff[key])
             for index, tmp in enumerate(test_follow_level):
                 del test_follow_level[index]["parts"]
             total_test.append(test_follow_level)

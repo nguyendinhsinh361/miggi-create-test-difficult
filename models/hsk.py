@@ -30,7 +30,7 @@ class QuestionModel(BaseModel):
     id: int
     kind: int
     general: GeneralModel
-    content: ContentModel
+    content: list[ContentModel]
     scores: list[int]
 
 
