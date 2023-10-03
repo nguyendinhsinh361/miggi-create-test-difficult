@@ -39,7 +39,19 @@ class ContentModel(BaseModel):
     Questions: list[QuestionModel]
 
 
-class HSKModel(BaseModel):
+class HSKPartModel(BaseModel):
     time: int = 0
     name: str
     content: list[ContentModel]
+
+
+class HSKModel(BaseModel):
+    title: str
+    parts: list[HSKPartModel]
+    level: int
+    groups: list
+    score: int
+    pass_score: int
+    pass_score: int
+    active: int
+    time: int

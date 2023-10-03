@@ -1,8 +1,8 @@
 from models.hsk import ContentModel
 from helper import helper
 import copy
-DATA_TEST = "test/level_2.json"
-DATA_TEST_DISTRIBUTE = "test/level_2_distribute.json"
+DATA_TEST = "exam/level_2.json"
+DATA_TEST_DISTRIBUTE = "exam/level_2_distribute.json"
 
 
 class Level_2_Service:
@@ -10,7 +10,7 @@ class Level_2_Service:
         self.obj = obj
 
     def gen_questions(self, kind_data):
-        total_test = []
+        total_parts_test = []
         total_distribute = []
         for i in range(kind_data["test_count"]):
             test_follow_level = copy.deepcopy(kind_data["level_format"])
@@ -29,11 +29,12 @@ class Level_2_Service:
                         test_follow_level, 1, kind_data["ids_diff"], kind_data["ids_not_diff"], key, distribute_questions_diff[key])
             for index, tmp in enumerate(test_follow_level):
                 del test_follow_level[index]["parts"]
-            total_test.append(test_follow_level)
+            total_parts_test.append(test_follow_level)
         helper.save_data_to_json(
             total_distribute, DATA_TEST_DISTRIBUTE)
-        helper.save_data_to_json(total_test, DATA_TEST)
+        helper.save_data_to_json(total_parts_test, DATA_TEST)
+        return total_parts_test
 
     def run(self):
         kind_data = self.obj
-        self.gen_questions(kind_data)
+        return self.gen_questions(kind_data)

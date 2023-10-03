@@ -5,7 +5,7 @@ from modules.questions import service
 
 
 KIND_FORMAT_PATH = "static/kind_format.json"
-TEST_PATH = "test/test_distribute_kind.json"
+TEST_PATH = "exam/exam_distribute_kind.json"
 
 
 def save_data_to_json(data, path):
