@@ -61,7 +61,7 @@ def get_question_if_all_sub_count_question_not_same(cursor, ids_diff, ids_not_di
             else:
                 query_1 = "SELECT * FROM questions WHERE id NOT IN ({})".format(
                     ','.join(map(str, ids_diff)))
-                query_completed += f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION ALL """
+                query_completed += f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION """
         else:
             if (index == len(sub_count_question) - 1):
                 query_1 = "SELECT * FROM questions WHERE id IN ({})".format(
@@ -70,7 +70,7 @@ def get_question_if_all_sub_count_question_not_same(cursor, ids_diff, ids_not_di
             else:
                 query_1 = "SELECT * FROM questions WHERE id IN ({})".format(
                     ','.join(map(str, ids_diff)))
-                query_completed += f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION ALL """
+                query_completed += f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION """
     cursor.execute(query_completed)
     raw_data = cursor.fetchall()
     if (all_question_in_kind != len(raw_data)):
@@ -78,11 +78,11 @@ def get_question_if_all_sub_count_question_not_same(cursor, ids_diff, ids_not_di
             if (index == len(sub_count_question) - 1):
                 query_exception = "SELECT * FROM questions WHERE id NOT IN ({})".format(
                     ','.join(map(str, ids_not_diff)))
-                query_completed = f'({query_exception} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION ALL '
+                query_completed = f"""({query_exception} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1)"""
             else:
                 query_exception = "SELECT * FROM questions WHERE id NOT IN ({})".format(
                     ','.join(map(str, ids_not_diff)))
-                query_completed = f'({query_exception} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1)'
+                query_completed = f"""({query_exception} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION """
     cursor.execute(query_completed)
     raw_data = cursor.fetchall()
 
@@ -91,11 +91,11 @@ def get_question_if_all_sub_count_question_not_same(cursor, ids_diff, ids_not_di
             if (index == len(sub_count_question) - 1):
                 query_1 = "SELECT * FROM questions WHERE id NOT IN ({})".format(
                     ','.join(map(str, ids_diff)))
-                query_completed = f'({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION ALL '
+                query_completed = f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1)"""
             else:
                 query_1 = "SELECT * FROM questions WHERE id NOT IN ({})".format(
                     ','.join(map(str, ids_diff)))
-                query_completed = f'({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1)'
+                query_completed = f"""({query_1} AND JSON_LENGTH(content) = {sub_question} AND kind = "{kind}" ORDER BY RAND() LIMIT 1) UNION """
 
     cursor.execute(query_completed)
     raw_data = cursor.fetchall()
@@ -123,6 +123,7 @@ def get_question_by_ids_kind_and_add_score(ids_diff, ids_not_diff, kind, score, 
         result = get_question_if_all_sub_count_question_same(
             cursor, ids_diff, ids_not_diff, kind, score, total_ques)
     else:
-        result = get_question_if_all_sub_count_question_not_same(
-            cursor, ids_diff, ids_not_diff, kind, score, total_ques, sub_count_question)
+        while len(result) != len(sub_count_question):
+            result = get_question_if_all_sub_count_question_not_same(
+                cursor, ids_diff, ids_not_diff, kind, score, total_ques, sub_count_question)
     return result
