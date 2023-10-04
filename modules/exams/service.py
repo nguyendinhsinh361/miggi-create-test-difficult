@@ -8,7 +8,9 @@ CONN = database.connect_db()
 def mapping_exams(total_parts_test, level):
     test_final = []
     for index, parts_test in enumerate(total_parts_test):
-        time = 50
+        time = 35
+        if (level == "2"):
+            time = 50
         if (level == "3"):
             time = 85
         elif (level == "4"):

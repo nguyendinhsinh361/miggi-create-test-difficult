@@ -2,10 +2,15 @@ import random
 import json
 from models.hsk import ContentModel
 from modules.questions import service
-
+import shutil
+import os
 
 KIND_FORMAT_PATH = "static/kind_format.json"
 TEST_PATH = "exam/exam_distribute_kind.json"
+
+
+EXAM_PATH = "exam/"
+RATE_PATH = "rate/"
 
 
 def save_data_to_json(data, path):
@@ -82,3 +87,12 @@ def gen_question_by_type_and_kind(test_follow_level, type_index, ids_diff, ids_n
         "Questions": kind_gen_result
     }
     test_follow_level[type_index]["content"].append(content_model)
+
+
+def clear_path_and_file_data():
+    if os.path.exists(EXAM_PATH):
+        shutil.rmtree(EXAM_PATH)
+    if os.path.exists(RATE_PATH):
+        shutil.rmtree(RATE_PATH)
+    os.mkdir(EXAM_PATH)
+    os.mkdir(RATE_PATH)

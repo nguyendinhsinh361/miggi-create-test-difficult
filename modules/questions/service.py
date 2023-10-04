@@ -124,6 +124,7 @@ def get_question_by_ids_kind_and_add_score(ids_diff, ids_not_diff, kind, score, 
             cursor, ids_diff, ids_not_diff, kind, score, total_ques)
     else:
         while len(result) != len(sub_count_question):
+            print(11111, kind, len(result), len(sub_count_question))
             result = get_question_if_all_sub_count_question_not_same(
                 cursor, ids_diff, ids_not_diff, kind, score, total_ques, sub_count_question)
     return result
