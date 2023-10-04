@@ -1,12 +1,10 @@
 # Step 2
-from config import database
 from helper import helper
 import json
 from tqdm import tqdm
 import numpy as np
 import math
 
-CONN = database.connect_db()
 INCREATE_RATE = 1.4
 DATA_RATE_DIFF = "rate/db_rate_diff.json"
 DATA_RATE_NOT_DIFF = "rate/db_rate_not_diff.json"
@@ -24,8 +22,7 @@ def get_group_ids_of_question_test(data):
     return np.array(all_ids).tolist()
 
 
-def get_questions_test_active():
-    cursor = CONN.cursor()
+def get_questions_test_active(cursor):
     cursor.execute(
         f"SELECT * FROM questions_test WHERE active = 1")
     raw_data = cursor.fetchall()
@@ -105,8 +102,8 @@ def get_questions_test_by_level_rate_output(questions_test_level_compare, rate_i
     return result
 
 
-def calculate_rate():
-    questions_test = get_questions_test_active()
+def calculate_rate(cursor):
+    questions_test = get_questions_test_active(cursor)
     questions_test_level = get_questions_test_by_level(questions_test)
     questions_test_level_compare = get_questions_test_by_level_compare_rate_result(
         questions_test_level)
@@ -115,5 +112,5 @@ def calculate_rate():
         questions_test_level_compare, INCREATE_RATE)
 
 
-def run():
-    calculate_rate()
+def run(cursor):
+    calculate_rate(cursor)

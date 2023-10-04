@@ -1,9 +1,7 @@
 # Step 1
 from helper import helper
 from tqdm import tqdm
-from config import database
 import json
-CONN = database.connect_db()
 
 DATA_RATE_DIFF = "rate/db_rate_diff.json"
 DATA_RATE_NOT_DIFF = "rate/db_rate_not_diff.json"
@@ -20,10 +18,9 @@ def get_user_history_ids_rate_result(user_history_ids_rate):
     return user_history_ids_diff_result, user_history_ids_not_diff_result
 
 
-def get_question_exist(user_history_ids_com):
+def get_question_exist(cursor, user_history_ids_com):
     question_ids_exist = list(user_history_ids_com.keys())
     question_ids_exist.remove('undefined')
-    cursor = CONN.cursor()
     query = "SELECT id FROM questions WHERE id IN ({})".format(
         ','.join(map(str, question_ids_exist)))
     cursor.execute(query)
@@ -56,8 +53,7 @@ def get_user_history_ids_complete(user_history_ids_raw):
     return user_history_ids_com
 
 
-def statistics_question():
-    cursor = CONN.cursor()
+def statistics_question(cursor):
     cursor.execute(
         f"SELECT * FROM users_history")
     raw_data = cursor.fetchall()
@@ -70,7 +66,8 @@ def statistics_question():
         user_history_ids_raw.append(user_history)
 
     user_history_ids_com = get_user_history_ids_complete(user_history_ids_raw)
-    user_history_ids_com_exist = get_question_exist(user_history_ids_com)
+    user_history_ids_com_exist = get_question_exist(
+        cursor, user_history_ids_com)
 
     user_history_ids_rate = get_user_history_ids_rate(
         user_history_ids_com_exist)
@@ -83,5 +80,5 @@ def statistics_question():
         user_history_ids_not_diff_result, DATA_RATE_NOT_DIFF)
 
 
-def run():
-    statistics_question()
+def run(cursor):
+    statistics_question(cursor)
